@@ -31,24 +31,18 @@ class Base64ContentField(Field):
 
 
 # Serializers define the API representation.
-class DroneSerializer(serializers.HyperlinkedModelSerializer):
-    medications = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-
-    class Meta:
-        model = Drone
-        fields = ['id', 'url', 'serial_number', 'model', 'weight_limit', 'battery_capacity', 'state', 'medications']
-        validators = [
-            UniqueValidator(
-                queryset=Drone.objects.all(),
-                message=_('Drones must have unique serial numbers.')
-            )
-        ]
-
-
 class MedicationSerializer(serializers.HyperlinkedModelSerializer):
     image = Base64ContentField(required=False)
 
     class Meta:
         model = Medication
         fields = ['id', 'url', 'name', 'weight', 'code', 'image', 'drone']
+
+
+class DroneSerializer(serializers.HyperlinkedModelSerializer):
+    medication_set = MedicationSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Drone
+        fields = ['id', 'url', 'serial_number', 'model', 'weight_limit', 'battery_capacity', 'state', 'medication_set']
 
