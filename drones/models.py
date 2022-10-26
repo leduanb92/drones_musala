@@ -42,10 +42,10 @@ class Drone(models.Model):
 
 class Medication(models.Model):
     # Validators
-    NAME_VALIDATOR = RegexValidator(_lazy_re_compile(r'[a-zA-Z0-9-_]+'),
+    NAME_VALIDATOR = RegexValidator(_lazy_re_compile(r'^[a-zA-Z0-9-_]+$'),
                                     message=_('It is only allowed letters, numbers, "-" and "_".'),
                                     code='not_allowed_characters')
-    CODE_VALIDATOR = RegexValidator(_lazy_re_compile(r'[A-Z0-9_]+'),
+    CODE_VALIDATOR = RegexValidator(_lazy_re_compile(r'^[A-Z0-9_]+$'),
                                     message=_('It is only allowed upper-case letters, numbers and "_".'),
                                     code='not_allowed_characters')
     WEIGHT_VALIDATOR = MinValueValidator(1, _("The minimum weight allowed is 1g."))
@@ -55,4 +55,4 @@ class Medication(models.Model):
     weight = models.FloatField(validators=[WEIGHT_VALIDATOR])
     code = models.CharField(max_length=100, validators=[CODE_VALIDATOR])
     image = models.ImageField(upload_to='medication_pictures/%Y/%m/%d/', max_length=100, validators=[size_validator])
-    drone = models.ForeignKey(Drone, models.SET_NULL, 'medications', null=True, blank=True)
+    drone = models.ForeignKey(Drone, on_delete=models.SET_NULL, null=True, blank=True)
