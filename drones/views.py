@@ -69,7 +69,7 @@ class DroneViewSet(viewsets.ModelViewSet):
         """
         Get available drones for loading.
         """
-        available_drones = self.get_queryset().filter(state=Drone.STATE_IDLE)
+        available_drones = self.get_queryset().filter(state=Drone.STATE_IDLE, battery_capacity__gt=25)
         serializer = self.get_serializer_class()(available_drones, many=True, context={'request': request})
         return Response(serializer.data)
 
