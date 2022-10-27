@@ -130,3 +130,6 @@ dmypy.json
 
 # Jetbrains IDEs
 .idea/
+
+# Media files
+.media/
