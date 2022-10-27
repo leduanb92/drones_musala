@@ -39,10 +39,38 @@ class MedicationSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id', 'url', 'name', 'weight', 'code', 'image', 'drone']
 
 
+class MedicationInDroneSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Medication
+        fields = ['id', 'url', 'name', 'weight', 'code', 'image']
+
+
 class DroneSerializer(serializers.HyperlinkedModelSerializer):
-    medication_set = MedicationSerializer(many=True, read_only=True)
+    medication_set = MedicationInDroneSerializer(many=True, read_only=True)
 
     class Meta:
         model = Drone
         fields = ['id', 'url', 'serial_number', 'model', 'weight_limit', 'battery_capacity', 'state', 'medication_set']
 
+
+class LoadMedicationDroneSerializer(serializers.HyperlinkedModelSerializer):
+    medication_set = serializers.PrimaryKeyRelatedField(queryset=Medication.objects.all(), many=True, required=True)
+
+    class Meta:
+        model = Drone
+        fields = ['id', 'url', 'serial_number', 'model', 'weight_limit', 'battery_capacity', 'state', 'medication_set']
+        read_only_fields = ['id', 'url', 'serial_number', 'model', 'weight_limit', 'battery_capacity', 'state']
+
+    def validate_medication_set(self, medications):
+        """
+        Check that total weight of medications do NOT surpass weight limit of drone.
+        """
+        total_weight = 0
+        for medication in medications:
+            total_weight += medication.weight
+
+        if total_weight > self.instance.weight_limit:
+            raise serializers.ValidationError(f"This drone has a weight limit of {self.instance.weight_limit}g. The total "
+                                              f"weight of medications was {total_weight}g")
+        return medications
