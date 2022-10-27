@@ -56,3 +56,6 @@ class Medication(models.Model):
     code = models.CharField(max_length=100, validators=[CODE_VALIDATOR])
     image = models.ImageField(upload_to='medication_pictures/%Y/%m/%d/', max_length=100, validators=[size_validator])
     drone = models.ForeignKey(Drone, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        ordering = ['name']
