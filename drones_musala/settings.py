@@ -146,3 +146,38 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 5  # crontab(minute='*/15'),
     },
 }
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    # Formatters ##############################################################
+    'formatters': {
+        'battery-level-check': {
+            'format': '[%(levelname)s] BATTERY CHECK DONE ON --> %(asctime)s %(message)s',
+            'datefmt': '%Y %b %d, %H:%M:%S',
+        },
+    },
+    # Handlers ##############################################################
+    'handlers': {
+        'battery-level-check': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'battery-level-check',
+            'filename': 'battery-level-check.log',
+            'backupCount': 30,
+            'maxBytes': 1024 * 1024 * 50  # 50 mb
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    # Loggers ###############################################################
+    'loggers': {
+        'battery-level-check-logger': {
+            'handlers': ['battery-level-check', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
