@@ -1,7 +1,7 @@
 from django.core.validators import MaxValueValidator, RegexValidator, MinValueValidator
 from django.db import models
 from django.utils.regex_helper import _lazy_re_compile
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from .validators import size_validator
 
 
