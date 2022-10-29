@@ -10,11 +10,13 @@ from drones.models import Drone, Medication
 class DroneViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Drones to be viewed or edited.
-    It also allows to make the following requests:
-    - Load a drone with medication.
-    - Check loaded medications of a specified drone.
-    - Check battery level of a specified drone.
-    - Get available drones for loading.
+
+    list: Return all drones, ordered by highest battery capacity.
+    retrieve: Return a drone instance.
+    create: Create a new drone instance.
+    update: Update a drone instance.
+    partial_update: Partially update a drone instance.
+    destroy: Delete a drone instance.
     """
     queryset = Drone.objects.all()
     serializer_class = DroneSerializer
@@ -77,6 +79,13 @@ class DroneViewSet(viewsets.ModelViewSet):
 class MedicationViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Medications to be viewed or edited.
+
+    list: Return all medications, ordered by highest battery capacity.
+    retrieve: Return a medication instance.
+    create: Create a new medication instance.
+    update: Update a medication instance.
+    partial_update: Partially update a medication instance.
+    destroy: Delete a medication instance.
     """
     queryset = Medication.objects.all()
     serializer_class = MedicationSerializer
