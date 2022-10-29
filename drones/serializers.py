@@ -37,6 +37,7 @@ class MedicationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Medication
         fields = ['id', 'url', 'name', 'weight', 'code', 'image', 'drone']
+        read_only_fields = ['drone']
 
 
 class MedicationInDroneSerializer(serializers.HyperlinkedModelSerializer):
