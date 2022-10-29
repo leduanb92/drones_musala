@@ -30,7 +30,7 @@ class Drone(models.Model):
     ]
 
     # Fields
-    serial_number = models.CharField(max_length=100)
+    serial_number = models.CharField(max_length=100, unique=True)
     model = models.CharField(max_length=15, choices=MODEL_CHOICES)
     weight_limit = models.PositiveSmallIntegerField(validators=[MaxValueValidator(500, _("The maximum weight limit of a drone is 500gr."))])
     battery_capacity = models.PositiveSmallIntegerField(validators=BATTERY_CAPACITY_VALIDATORS)
