@@ -47,10 +47,6 @@ The docker-compose file has all the services to run the project. Just follow the
 
 You can go and visit the [Browsable API](http://localhost:8000) to see and browse the endpoints, or you can interact with it using any tool of your preference like **Postman**.
 
-You can also see the API documentation [here](http://localhost:8000/api/docs).
-
-
-
-
+You can also see the API documentation [here with Swagger-UI](http://localhost:8000/api-docs/swagger) or [here with ReDoc](http://localhost:8000/api-docs/redoc).
 
 

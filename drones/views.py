@@ -1,3 +1,6 @@
+from drf_yasg import openapi
+from drf_yasg.openapi import Schema
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -29,6 +32,10 @@ class DroneViewSet(viewsets.ModelViewSet):
 
         return serializer_class
 
+    @swagger_auto_schema(responses={200: openapi.Response('Drone loaded with medications',
+                                                          schema=LoadMedicationDroneSerializer
+                                                          ),
+                                    404: 'Drone not found'})
     @action(methods=['post'], detail=True)
     def load_with_medication(self, request, pk=None):
         """
@@ -48,6 +55,7 @@ class DroneViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @swagger_auto_schema(responses={200: MedicationSerializer(many=True), 404: 'Drone not found'})
     @action(methods=['get'], detail=True)
     def check_loaded_medications(self, request, pk=None):
         """
@@ -57,6 +65,15 @@ class DroneViewSet(viewsets.ModelViewSet):
         medications_serializer = MedicationSerializer(drone.medication_set, many=True, context={'request': request})
         return Response(medications_serializer.data)
 
+    @swagger_auto_schema(responses={200: openapi.Response('Battery level of drone',
+                                                          schema=Schema(title='battery level',
+                                                                        type=openapi.TYPE_OBJECT,
+                                                                        properties={'battery_level': Schema(
+                                                                            type=openapi.TYPE_INTEGER)
+                                                                        }
+                                                                        )
+                                                          ),
+                                    404: 'Drone not found'})
     @action(methods=['get'], detail=True)
     def check_battery_level(self, request, pk=None):
         """

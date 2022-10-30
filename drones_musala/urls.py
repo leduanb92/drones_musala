@@ -17,9 +17,10 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
-from rest_framework import routers
-from rest_framework.documentation import include_docs_urls
+from django.urls import path, include, re_path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import routers, permissions
 
 from drones import views
 
@@ -30,13 +31,25 @@ router.register(r'medications', views.MedicationViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path('accounts/', include('rest_framework.urls')),
+]
+
+# Documentation
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Drones API",
+        default_version='v1.0.0',
+        description="API to manage drones and medications to be delivered",
+        contact=openapi.Contact(name='Leduan B. Rosell', email="leduanb@gmail.com"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
+
+urlpatterns += [
+   re_path(r'^api-docs/swagger/$', schema_view.with_ui('swagger'), name='schema-swagger-ui'),
+   re_path(r'^api-docs/redoc/$', schema_view.with_ui('redoc'), name='schema-redoc'),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    # Documentation
-    urlpatterns += [path('api/docs/', include_docs_urls(title="API Endpoints of Musala Drones Project",
-                                                        public=False,
-                                                        schema_url='/'
-                                                        )
-                         )]
