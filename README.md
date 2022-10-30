@@ -49,4 +49,11 @@ You can go and visit the [Browsable API](http://localhost:8000) to see and brows
 
 You can also see the API documentation [here with Swagger-UI](http://localhost:8000/api-docs/swagger) or [here with ReDoc](http://localhost:8000/api-docs/redoc).
 
+Instructions to run tests
+-----------------------------
+There are implemented unit tests for all the main functionalities specified in the exercise. They are located
+in `drones/tests.py`. To run them, just open a terminal and execute the following command:
 
+`docker exec -it drones_app python3 /app/manage.py test`.
+
+You will see the results in your terminal

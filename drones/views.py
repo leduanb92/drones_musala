@@ -48,7 +48,7 @@ class DroneViewSet(viewsets.ModelViewSet):
                     'This drone has less than 25% of battery, so it can not be loaded with medication.'
                 ]
             }
-            return Response(error, status=status.HTTP_400_BAD_REQUEST)
+            return Response(error, status=status.HTTP_409_CONFLICT)
         serializer = self.get_serializer_class()(drone, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save(state=Drone.STATE_LOADED)
