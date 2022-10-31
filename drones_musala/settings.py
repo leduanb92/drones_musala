@@ -135,8 +135,8 @@ REST_FRAMEWORK = {
 }
 
 # Celery configuration
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -145,7 +145,7 @@ CELERY_TIMEZONE = 'UTC'
 CELERY_BEAT_SCHEDULE = {
     'check-drones-battery-level': {
         'task': 'drones.tasks.log_drones_battery_levels',
-        'schedule': 5  # crontab(minute='*/15'),
+        'schedule': crontab(minute='*/10'),
     },
 }
 

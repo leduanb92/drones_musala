@@ -4,7 +4,8 @@ version: '3'
 services:
   web:
     build: .
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000 && celery -A drones_musala worker -l info"
+    image: app
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     container_name: drones_app
     volumes:
       - .:/app
@@ -12,14 +13,33 @@ services:
       - "8000:8000"
     depends_on:
       - redis
+    networks:
+      - redis
+  celery:
+    image: app
+    environment:
+      - DJANGO_SETTINGS_MODULE=drones_musala.settings
+    command: bash -c "celery -A drones_musala worker -l info"
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+      - redis
+    networks:
+      - redis
   redis:
     image: redis:6.2-alpine
     restart: always
     ports:
-      - '6378:6379'
+      - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning 
     volumes: 
       - redis:/data
+    networks:
+      - redis
 volumes:
   redis:
     driver: local
+    
+networks:
+  redis:
